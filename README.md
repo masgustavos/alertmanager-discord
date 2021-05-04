@@ -1,5 +1,5 @@
 # Alertmanager Discord Webhook
-![Go Report Card](https://goreportcard.com/badge/github.com/masgustavos/alertmanager-discord-webhook?style=flat-square)
+![Go Report Card](https://goreportcard.com/badge/github.com/masgustavos/alertmanager-discord?style=flat-square)
 
 ## Goal
 
