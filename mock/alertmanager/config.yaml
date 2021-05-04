@@ -1,0 +1,44 @@
+route:
+  receiver: "discord-default"
+
+  # How long to initially wait to send a notification for a group
+  # of alerts. Allows to wait for an inhibiting alert to arrive or collect
+  # more initial alerts for the same group. (Usually ~0s to few minutes.)
+  group_wait: 15s
+
+  # How long to wait before sending a notification about new alerts that
+  # are added to a group of alerts for which an initial notification has
+  # already been sent. (Usually ~5m or more.)
+  group_interval: 15s
+
+  # How long to wait before sending a notification again if it has already
+  # been sent successfully for an alert. (Usually ~3h or more).
+  repeat_interval: 15s
+
+  routes:
+    # Any alert that contains the label "owner: team-go" should be sent to the
+    # Discord Channel #team-go, represented by the receiver "discord-team-go"
+    - match:
+        owner: team-prometheus
+      receiver: "discord-team-prometheus"
+      continue: false
+    - match:
+        owner: team-go
+      receiver: "discord-team-go"
+      # If you want matching alerts to also go to the global receiver "discord-default"
+      # set "continue: true". They'll join alerts not matched and will be sent together.
+      continue: true
+    - receiver: "discord-default"
+receivers:
+  - name: "discord-default"
+    webhook_configs:
+      - send_resolved: true
+        url: "http://app:8080/default"
+  - name: "discord-team-go"
+    webhook_configs:
+      - send_resolved: true
+        url: "http://app:8080/team-go"
+  - name: "discord-team-prometheus"
+    webhook_configs:
+      - send_resolved: true
+        url: "http://app:8080/team-prometheus"

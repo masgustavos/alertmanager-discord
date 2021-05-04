@@ -1,0 +1,78 @@
+groups:
+  - name: prometheus-mock-alerts
+    rules:
+      - alert: PrometheusHighEngineQueryDuration
+        expr: prometheus_engine_query_duration_seconds{quantile=~"(0.99|0.9)"} > 0
+        for: 10s
+        labels:
+          owner: team-prometheus
+          severity: information
+        annotations:
+          summary: "Prometheus Engine Query Duration is High"
+          description: "Quantile: {{ $labels.quantile }} - Value: {{ $value }}"
+      - alert: PrometheusHighNotificationLatency
+        expr: prometheus_notifications_latency_seconds > 0
+        for: 10s
+        labels:
+          owner: team-prometheus
+          severity: warning
+        annotations:
+          summary: "Prometheus Notification Latency is High"
+          description: "Quantile: {{ $labels.quantile }} - Value: {{ $value }}"
+      - alert: PrometheusHighRuleEvaluationDuration
+        expr: prometheus_rule_evaluation_duration_seconds > 0
+        for: 10s
+        labels:
+          owner: team-prometheus
+          severity: critical
+        annotations:
+          summary: "Prometheus Rule Evaluation Duration is High"
+          description: "Quantile: {{ $labels.quantile }} - Value: {{ $value }}"
+      - alert: PrometheusHighEngineQueryDurationCountRate
+        expr: sum by(slice) (rate(prometheus_engine_query_duration_seconds_count [1m])) > 0
+        for: 10s
+        labels:
+          owner: team-prometheus
+          severity: disaster
+        annotations:
+          summary: "Prometheus Rate of Engine Query Duration Count is High"
+          description: "Slice: {{ $labels.slice }} - Value: {{ $value }}"
+  - name: go-mock-alerts
+    rules:
+      - alert: GoHighGCDurationRate
+        expr: rate(go_gc_duration_seconds_count [1m]) > 0
+        for: 10s
+        labels:
+          severity: disaster
+          owner: team-go
+        annotations:
+          summary: "Go GC Duration Rate is High"
+          description: "Value: {{ $value }}"
+      - alert: GoHighMemstatAllocBytes
+        expr: go_memstats_alloc_bytes > 0
+        for: 10s
+        labels:
+          severity: critical
+          owner: team-go
+        annotations:
+          summary: "Go Memstat Alloc in Bytes is High"
+          description: "Value: {{ $value }}"
+      - alert: GoHighGCCPUFraction
+        expr: rate(go_memstats_gc_cpu_fraction[5m]) > 0
+        for: 10s
+        labels:
+          severity: information
+          owner: team-go
+        annotations:
+          summary: "Go Memstat GC CPU Fraction Rate is High"
+          description: "Value: {{ $value }}"
+  - name: general-alerts
+    rules:
+      - alert: PrometheusRequestDurationSecondsCount
+        expr: prometheus_http_request_duration_seconds_count > 0
+        for: 10s
+        labels:
+          severity: warning
+        annotations:
+          summary: "Prometheus Request Duration greater than zero"
+          description: "Handler: {{ $labels.handler }} Value: {{ $value }}"

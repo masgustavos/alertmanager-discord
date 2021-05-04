@@ -1,0 +1,67 @@
+---
+# Set this URL to be able to click on the embed title and be redirected to
+# Prometheus with the query that generated the alert
+prometheusURL: "http://localhost:9090"
+# Should be "status" or "severity". Defaults to "status".
+messageType: severity
+# How many firing alerts are necessary to add the "rolesToMention" in the message
+firingCountToMention: 20
+# Global config that defines which roles should be mentioned when the conditions
+# to "firingCountToMention" or "severitiesToMention" are met. Can be overridden
+# in channels config. To get the Role ID, just type the "@RoleName" in Discord
+# prefixed with "\" and send a message in the channel. Like "\@RoleName"
+rolesToMention:
+  - <@&744580719505965077>
+# Embed esthetics when the messageType is set to "status"
+status:
+  firing:
+    emoji: ":x:"
+    color: 10038562 #EmbedColorDarkRed
+  resolved:
+    emoji: ":white_check_mark:"
+    color: 3066993 # EmbedColorGreen
+# Setting the label key that represents the concept of "severity" and the
+# esthetics for each of its values.
+severity:
+  label: severity
+  values:
+    unknown:
+      color: 9807270 # EmbedColorGrey
+      emoji: ":grey_question:"
+    information:
+      color: 3447003 # EmbedColorBlue
+      emoji: ":information_source:"
+    warning:
+      color: 15844367 # EmbedColorGold
+      emoji: ":warning:"
+    critical:
+      color: 11027200 # EmbedColorDarkOrange
+      emoji: ":x:"
+    disaster:
+      color: 10038562 # EmbedColorDarkRed
+      emoji: ":fire:"
+# Which severities should enable mentioning in a message. Can be overriden
+# in channels config
+severitiesToMention:
+  - disaster
+# Which severities should not be sent as message if no other is present.
+# Useful to avoid sending only information alerts out of an incident context,
+# for example.
+severitiesToIgnoreWhenAlone:
+  - information
+# The Discord channels and their basic info, with any necessary overrides from
+# the global configs, such as "rolesToMention", "severitiesToMention" and
+# "severitiesToIgnoreWhenAlone"
+channels:
+  default:
+    name: default
+    webhookURL: https://discord.com/api/webhooks/809132387233431572/5JfB6aCqwAcCtl373q5hVR7Ba69mJ_GmKUbZdn_Ml1V2OGxIeqSF_7yRweJY3wZT3bZz
+  team-go:
+    name: team-go
+    webhookURL: https://discord.com/api/webhooks/806249501110698038/YbG6dErH5NZvjgOHtV-bMyE29A9LK3c2mP5X79PmRkKlUMejAjdpJeNOpud-7wOPZsge
+  team-prometheus:
+    name: team-prometheus
+    webhookURL: https://discord.com/api/webhooks/806537845048737792/4bylYwmt4MUewAFCdquKnG6famTItSL0DmNpPLvu9xO83yvd7yHjrFNYgj-B5D-OD0MG
+    severitiesToMention:
+      - disaster
+      - critical

@@ -1,0 +1,175 @@
+{
+  "receiver": "discord-back-office",
+  "status": "firing",
+  "alerts": [
+    {
+      "status": "firing",
+      "labels": {
+        "alertname": "TestNotification0",
+        "instance": "localhost:9090",
+        "job": "prometheus",
+        "owner": "back-office",
+        "prometheus_instance": "docker-compose",
+        "severity": "critical"
+      },
+      "annotations": {
+        "description": "Fantastic and descriptive description: Backoffice CRITICAL",
+        "summary": "Test Notification 0"
+      },
+      "startsAt": "2021-02-02T14:25:03.123244212Z",
+      "endsAt": "0001-01-01T00:00:00Z",
+      "generatorURL": "http://afa8e8cd2490:9090/graph?g0.expr=up+%21%3D+0&g0.tab=1",
+      "fingerprint": "0ef0416075c52610"
+    },
+    {
+      "status": "firing",
+      "labels": {
+        "alertname": "TestNotification01",
+        "instance": "localhost:9090",
+        "job": "prometheus",
+        "owner": "back-office",
+        "prometheus_instance": "docker-compose",
+        "severity": "critical"
+      },
+      "annotations": {
+        "description": "Fantastic and descriptive description: Backoffice CRITICAL 2",
+        "summary": "Test Notification 0"
+      },
+      "startsAt": "2021-02-02T18:44:18.123244212Z",
+      "endsAt": "0001-01-01T00:00:00Z",
+      "generatorURL": "http://afa8e8cd2490:9090/graph?g0.expr=up+%21%3D+0&g0.tab=1",
+      "fingerprint": "8617b30a54752c65"
+    },
+    {
+      "status": "firing",
+      "labels": {
+        "alertname": "TestNotification2",
+        "instance": "localhost:9090",
+        "job": "prometheus",
+        "owner": "back-office",
+        "prometheus_instance": "docker-compose",
+        "severity": "warning"
+      },
+      "annotations": {
+        "description": "Fantastic and descriptive description: Backoffice WARNING",
+        "summary": "Test Notification 2"
+      },
+      "startsAt": "2021-02-02T14:25:03.123244212Z",
+      "endsAt": "0001-01-01T00:00:00Z",
+      "generatorURL": "http://afa8e8cd2490:9090/graph?g0.expr=up+%21%3D+0&g0.tab=1",
+      "fingerprint": "c1bbe2826ccaa065"
+    },
+    {
+      "status": "firing",
+      "labels": {
+        "alertname": "TestNotification0",
+        "instance": "localhost:9090",
+        "job": "prometheus",
+        "owner": "back-office",
+        "prometheus_instance": "docker-compose",
+        "quantile": "0",
+        "severity": "critical"
+      },
+      "annotations": {
+        "description": "Quantile: 0 - Value: 4.5376e-05",
+        "summary": "Back Office Notification"
+      },
+      "startsAt": "2021-02-02T18:48:48.123244212Z",
+      "endsAt": "0001-01-01T00:00:00Z",
+      "generatorURL": "http://afa8e8cd2490:9090/graph?g0.expr=go_gc_duration_seconds+%3E+0&g0.tab=1",
+      "fingerprint": "3af99032ce4f31e7"
+    },
+    {
+      "status": "firing",
+      "labels": {
+        "alertname": "TestNotification0",
+        "instance": "localhost:9090",
+        "job": "prometheus",
+        "owner": "back-office",
+        "prometheus_instance": "docker-compose",
+        "quantile": "0.25",
+        "severity": "critical"
+      },
+      "annotations": {
+        "description": "Quantile: 0.25 - Value: 8.3681e-05",
+        "summary": "Back Office Notification"
+      },
+      "startsAt": "2021-02-02T18:48:48.123244212Z",
+      "endsAt": "0001-01-01T00:00:00Z",
+      "generatorURL": "http://afa8e8cd2490:9090/graph?g0.expr=go_gc_duration_seconds+%3E+0&g0.tab=1",
+      "fingerprint": "fb6f474524228416"
+    },
+    {
+      "status": "firing",
+      "labels": {
+        "alertname": "TestNotification0",
+        "instance": "localhost:9090",
+        "job": "prometheus",
+        "owner": "back-office",
+        "prometheus_instance": "docker-compose",
+        "quantile": "0.5",
+        "severity": "critical"
+      },
+      "annotations": {
+        "description": "Quantile: 0.5 - Value: 0.000185842",
+        "summary": "Back Office Notification"
+      },
+      "startsAt": "2021-02-02T18:48:48.123244212Z",
+      "endsAt": "0001-01-01T00:00:00Z",
+      "generatorURL": "http://afa8e8cd2490:9090/graph?g0.expr=go_gc_duration_seconds+%3E+0&g0.tab=1",
+      "fingerprint": "364d85e9d1b0913c"
+    },
+    {
+      "status": "firing",
+      "labels": {
+        "alertname": "TestNotification0",
+        "instance": "localhost:9090",
+        "job": "prometheus",
+        "owner": "back-office",
+        "prometheus_instance": "docker-compose",
+        "quantile": "0.75",
+        "severity": "critical"
+      },
+      "annotations": {
+        "description": "Quantile: 0.75 - Value: 0.000246045",
+        "summary": "Back Office Notification"
+      },
+      "startsAt": "2021-02-02T18:48:48.123244212Z",
+      "endsAt": "0001-01-01T00:00:00Z",
+      "generatorURL": "http://afa8e8cd2490:9090/graph?g0.expr=go_gc_duration_seconds+%3E+0&g0.tab=1",
+      "fingerprint": "293a6f0e3560177d"
+    },
+    {
+      "status": "firing",
+      "labels": {
+        "alertname": "TestNotification0",
+        "instance": "localhost:9090",
+        "job": "prometheus",
+        "owner": "back-office",
+        "prometheus_instance": "docker-compose",
+        "quantile": "1",
+        "severity": "critical"
+      },
+      "annotations": {
+        "description": "Quantile: 1 - Value: 0.000258123",
+        "summary": "Back Office Notification"
+      },
+      "startsAt": "2021-02-02T18:48:48.123244212Z",
+      "endsAt": "0001-01-01T00:00:00Z",
+      "generatorURL": "http://afa8e8cd2490:9090/graph?g0.expr=go_gc_duration_seconds+%3E+0&g0.tab=1",
+      "fingerprint": "d775962fdd74ceda"
+    }
+  ],
+  "groupLabels": {},
+  "commonLabels": {
+    "instance": "localhost:9090",
+    "job": "prometheus",
+    "owner": "back-office",
+    "prometheus_instance": "docker-compose"
+  },
+  "commonAnnotations": {},
+  "externalURL": "http://122e51fcead5:9093",
+  "version": "4",
+  "groupKey": "{}/{owner=\"back-office\"}:{}",
+  "truncatedAlerts": 0
+}
