@@ -3,7 +3,7 @@ package alertmanager
 import (
 	"regexp"
 
-	"github.com/masgustavos/alertmanager-discord-webhook/config"
+	"github.com/masgustavos/alertmanager-discord/config"
 )
 
 // ExtractBodyInfo Extracts the necessary info to perform the checks and construct the Discord

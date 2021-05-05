@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/masgustavos/alertmanager-discord-webhook/alertmanager"
-	"github.com/masgustavos/alertmanager-discord-webhook/config"
+	"github.com/masgustavos/alertmanager-discord/alertmanager"
+	"github.com/masgustavos/alertmanager-discord/config"
 )
 
 // SendAlerts deals with the macro logic of sending alerts to Discord Channels

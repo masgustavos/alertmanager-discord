@@ -5,9 +5,9 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/masgustavos/alertmanager-discord-webhook/alertmanager"
-	"github.com/masgustavos/alertmanager-discord-webhook/config"
-	"github.com/masgustavos/alertmanager-discord-webhook/discord"
+	"github.com/masgustavos/alertmanager-discord/alertmanager"
+	"github.com/masgustavos/alertmanager-discord/config"
+	"github.com/masgustavos/alertmanager-discord/discord"
 )
 
 func main() {

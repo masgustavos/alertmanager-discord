@@ -26,6 +26,11 @@ type EmbedAppearance struct {
 	Emoji string `json:"emoji" yaml:"emoji"`
 }
 
+type SeverityDefinition struct {
+	Label  string                     `json:"label" yaml:"label"`
+	Values map[string]EmbedAppearance `json:"values" yaml:"values"`
+}
+
 // Config defines the (.yaml|.json) config structured to be used by the app
 type Config struct {
 	PrometheusURL               string                     `json:"prometheusURL" yaml:"prometheusURL"`
@@ -37,18 +42,56 @@ type Config struct {
 	RolesToMention              []string                   `json:"rolesToMention" yaml:"rolesToMention"`
 	SeveritiesToMention         []string                   `json:"severitiesToMention" yaml:"severitiesToMention"`
 	SeveritiesToIgnoreWhenAlone []string                   `json:"severitiesToIgnoreWhenAlone" yaml:"severitiesToIgnoreWhenAlone"`
-	Severity                    struct {
-		Label  string                     `json:"label" yaml:"label"`
-		Values map[string]EmbedAppearance `json:"values" yaml:"values"`
-	}
-	DiscordChannels map[string]DiscordChannel `json:"channels" yaml:"channels"`
+	Severity                    SeverityDefinition
+	DiscordChannels             map[string]DiscordChannel `json:"channels" yaml:"channels"`
+}
+
+var defaultConfig = Config{
+	MessageType:          "status",
+	AvatarURL:            "https://raw.githubusercontent.com/masgustavos/alertmanager-discord/master/assets/images/prometheus-logo.png",
+	Username:             "alertmanager-discord",
+	FiringCountToMention: -1,
+	Status: map[string]EmbedAppearance{
+		"firing": EmbedAppearance{
+			Emoji: ":x:",
+			Color: 10038562, // EmbedColorDarkRed
+		},
+		"resolved": EmbedAppearance{
+			Emoji: ":white_check_mark:",
+			Color: 3066993, // EmbedColorGreen
+		},
+	},
+	Severity: SeverityDefinition{
+		Label: "severity",
+		Values: map[string]EmbedAppearance{
+			"unknown": EmbedAppearance{
+				Color: 9807270, // EmbedColorGrey
+				Emoji: ":grey_question:",
+			},
+			"information": EmbedAppearance{
+				Color: 3447003, // EmbedColorBlue
+				Emoji: ":information_source:",
+			},
+			"warning": EmbedAppearance{
+				Color: 15844367, // EmbedColorGold
+				Emoji: ":warning:",
+			},
+			"critical": EmbedAppearance{
+				Color: 11027200, // EmbedColorDarkOrange
+				Emoji: ":x:",
+			},
+			"disaster": EmbedAppearance{
+				Color: 10038562, // EmbedColorDarkRed
+				Emoji: ":fire:",
+			},
+		},
+	},
 }
 
 // LoadUserConfig provides a Config struct to be used throughout the application
 func LoadUserConfig() *Config {
 
-	configFilePath := getEnv("CONFIG_PATH", "./config.default.yaml")
-	defaultConfig := loadConfigurationFile("./config.default.yaml")
+	configFilePath := getEnv("CONFIG_PATH", "./config.yaml")
 	userConfig := loadConfigurationFile(configFilePath)
 
 	err := mergo.Merge(&userConfig, defaultConfig)

@@ -7,9 +7,9 @@ tmp_dir = "tmp"
 
 [build]
 # Just plain old shell command. You could use `make` as well.
-cmd = "go build -gcflags \"all=-N -l\" -o ./tmp/alertmanager-discord-webhook ."
-# full_bin = "APP_ENV=dev APP_USER=air ./tmp/alertmanager-discord-webhook"
-full_bin = "/go/bin/dlv --listen=:2345 --headless=true --log=true --log-output=rpc --api-version=2 exec ./tmp/alertmanager-discord-webhook --continue --accept-multiclient"
+cmd = "go build -gcflags \"all=-N -l\" -o ./tmp/alertmanager-discord ."
+# full_bin = "APP_ENV=dev APP_USER=air ./tmp/alertmanager-discord"
+full_bin = "/go/bin/dlv --listen=:2345 --headless=true --log=true --log-output=rpc --api-version=2 exec ./tmp/alertmanager-discord --continue --accept-multiclient"
 # Watch these filename extensions.
 include_ext = ["go", "tpl", "tmpl", "html"]
 # Ignore these filename extensions or directories.
