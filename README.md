@@ -148,6 +148,17 @@ channels:
 
 Copy the example config to a file name `my-config.yaml` and use your own *webhookURLs*. This file is gitignored.
 
+### Install in Kubernetes with Helm
+
+There's a Helm Chart available at [masgustavos/helm/alertmanager-discord](https://github.com/masgustavos/helm/tree/main/charts/alertmanager-discord)
+
+```bash
+# Add the repository
+helm repo add masgustavos https://masgustavos.github.io/helm
+# Install the chart
+helm install alertmanager-discord --values <path_to_your_values> masgustavos/alertmanager-discord
+```
+
 ## Develop and Experiment
 
 There's a [docker-compose.yaml](docker-compose.yaml) with an ephemeral Prometheus and Alertmanager, so you can spin up a small environment and test different configurations. The configuration files to be mounted in the testing containers can be found in the [mock](mock/) folder:
