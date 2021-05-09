@@ -21,7 +21,9 @@ status:
     emoji: ":white_check_mark:"
     color: 3066993 # EmbedColorGreen
 # Setting the label key that represents the concept of "severity" and the
-# esthetics for each of its values.
+# aesthetics for each of its values. The "priority" property determines
+# the order of the alerts in the message, where a higher priority means the
+# alert will be shown first.
 severity:
   label: severity
   values:
@@ -34,12 +36,15 @@ severity:
     warning:
       color: 15844367 # EmbedColorGold
       emoji: ":warning:"
+      priority: 1
     critical:
       color: 11027200 # EmbedColorDarkOrange
       emoji: ":x:"
+      priority: 2
     disaster:
       color: 10038562 # EmbedColorDarkRed
       emoji: ":fire:"
+      priority: 3
 # Which severities should enable mentioning in a message. Can be overriden
 # in channels config
 severitiesToMention:

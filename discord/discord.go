@@ -2,6 +2,7 @@ package discord
 
 import (
 	"bytes"
+	"container/heap"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -188,7 +189,8 @@ func createDiscordMessageEmbeds(
 	status string,
 	configs config.Config) ([]MessageEmbed, error) {
 
-	embeds := []MessageEmbed{}
+	embedQueue := make(EmbedPriorityQueue, 0)
+	heap.Init(&embedQueue)
 
 	for _, alerts := range alertsGroupedByName {
 
@@ -210,7 +212,7 @@ func createDiscordMessageEmbeds(
 			embed.Description = embed.Description + fmt.Sprintf("```%s```\n", alert.Annotations.Description)
 		}
 
-		err := handleEmbedAppearance(&embed, status, alerts[0], configs)
+		priority, err := handleEmbedAppearance(&embed, status, alerts[0], configs)
 		if err != nil {
 			err = fmt.Errorf(
 				`discord.createDiscordMessageEmbeds:
@@ -219,46 +221,62 @@ func createDiscordMessageEmbeds(
 			return []MessageEmbed{}, err
 		}
 
-		embeds = append(embeds, embed)
+		embedQueueItem := &MessageEmbedQueueItem{
+			Embed:    embed,
+			Priority: priority,
+		}
+
+		heap.Push(&embedQueue, embedQueueItem)
 	}
 
-	return embeds, nil
+	embedsOrderedByPriority := []MessageEmbed{}
+
+	for embedQueue.Len() > 0 {
+		embedQueueItem := heap.Pop(&embedQueue).(*MessageEmbedQueueItem)
+		embedsOrderedByPriority = append(embedsOrderedByPriority, embedQueueItem.Embed)
+	}
+
+	return embedsOrderedByPriority, nil
 }
 
 func handleEmbedAppearance(
 	embed *MessageEmbed, status string,
 	alert alertmanager.Alert,
-	configs config.Config) error {
+	configs config.Config) (priority int, err error) {
 
-	if status == "firing" {
+	if status == "resolved" {
+		embed.Color = configs.Status["resolved"].Color
+		embed.Title = fmt.Sprintf("\n%s %s", configs.Status["resolved"].Emoji, embed.Title)
+		return 0, nil
+	} else if status == "firing" {
 		switch configs.MessageType {
 		case "status":
 			embed.Color = configs.Status["firing"].Color
 			embed.Title = fmt.Sprintf("\n%s %s", configs.Status["firing"].Emoji, embed.Title)
+			return 0, nil
 		case "severity":
-			handleEmbedSeverity(embed, alert, configs)
+			severityAppearance := handleEmbedSeverity(embed, alert, configs)
+			return severityAppearance.Priority, nil
 		default:
-			return fmt.Errorf(
+			return 0, fmt.Errorf(
 				"discord.handleEmbedAppearance: No matching message type for %s",
 				configs.MessageType)
 		}
-	} else if status == "resolved" {
-		embed.Color = configs.Status["resolved"].Color
-		embed.Title = fmt.Sprintf("\n%s %s", configs.Status["resolved"].Emoji, embed.Title)
 	}
 
-	return nil
+	return 0, nil
 }
 
-func handleEmbedSeverity(embed *MessageEmbed, alert alertmanager.Alert, configs config.Config) {
-	severityValue, ok := alert.Labels[configs.Severity.Label]
+func handleEmbedSeverity(embed *MessageEmbed, alert alertmanager.Alert, configs config.Config) config.SeverityAppearance {
+	severity, ok := alert.Labels[configs.Severity.Label]
+	var SeverityAppearance config.SeverityAppearance
 	if ok {
-		severity, ok := configs.Severity.Values[severityValue]
+		SeverityAppearance, ok = configs.Severity.Values[severity]
 		if !ok {
-			severity = configs.Severity.Values["unknown"]
+			SeverityAppearance = configs.Severity.Values["unknown"]
 		}
-		embed.Title = fmt.Sprintf("\n%s %s", severity.Emoji, embed.Title)
-		embed.Color = severity.Color
+		embed.Title = fmt.Sprintf("\n%s %s", SeverityAppearance.Emoji, embed.Title)
+		embed.Color = SeverityAppearance.Color
 	}
-	return
+	return SeverityAppearance
 }

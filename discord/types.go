@@ -16,3 +16,12 @@ type MessageEmbed struct {
 	Timestamp   string `json:"timestamp,omitempty"`
 	Color       int    `json:"color,omitempty"`
 }
+
+type MessageEmbedQueueItem struct {
+	Embed    MessageEmbed `json:"messageEmbed,omitempty"`
+	Priority int          `json:"priority"`
+	Index    int          `json:"index"`
+}
+
+// A AlertPriorityQueue implements heap.Interface and holds Alertmanager Alerts.
+type EmbedPriorityQueue []*MessageEmbedQueueItem
