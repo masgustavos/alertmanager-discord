@@ -16,3 +16,11 @@ type MessageEmbed struct {
 	Timestamp   string `json:"timestamp,omitempty"`
 	Color       int    `json:"color,omitempty"`
 }
+
+type EmbedQueueItem struct {
+	Embed    MessageEmbed `json:"messageEmbed,omitempty"`
+	Priority int          `json:"priority"`
+}
+
+// A EmbedQueue holds embeds to be ordered before being sent to discord.
+type EmbedQueue []EmbedQueueItem
