@@ -138,7 +138,6 @@ func handleMentions(
 		addRolesToEmbedContent(content, discordChannel, configs)
 	}
 
-	return
 }
 
 func checkIfShouldMentionBySeverity(
@@ -181,7 +180,6 @@ func addRolesToEmbedContent(
 		*content = *content + "    " + strings.Join(configs.RolesToMention, " ")
 	}
 
-	return
 }
 
 func createDiscordMessageEmbeds(
