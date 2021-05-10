@@ -17,11 +17,10 @@ type MessageEmbed struct {
 	Color       int    `json:"color,omitempty"`
 }
 
-type MessageEmbedQueueItem struct {
+type EmbedQueueItem struct {
 	Embed    MessageEmbed `json:"messageEmbed,omitempty"`
 	Priority int          `json:"priority"`
-	Index    int          `json:"index"`
 }
 
-// A AlertPriorityQueue implements heap.Interface and holds Alertmanager Alerts.
-type EmbedPriorityQueue []*MessageEmbedQueueItem
+// A EmbedQueue holds embeds to be ordered before being sent to discord.
+type EmbedQueue []EmbedQueueItem

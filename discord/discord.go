@@ -2,10 +2,10 @@ package discord
 
 import (
 	"bytes"
-	"container/heap"
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"sort"
 	"strings"
 
 	"github.com/masgustavos/alertmanager-discord/alertmanager"
@@ -189,8 +189,7 @@ func createDiscordMessageEmbeds(
 	status string,
 	configs config.Config) ([]MessageEmbed, error) {
 
-	embedQueue := make(EmbedPriorityQueue, 0)
-	heap.Init(&embedQueue)
+	embedQueue := []EmbedQueueItem{}
 
 	for _, alerts := range alertsGroupedByName {
 
@@ -221,18 +220,21 @@ func createDiscordMessageEmbeds(
 			return []MessageEmbed{}, err
 		}
 
-		embedQueueItem := &MessageEmbedQueueItem{
+		embedQueueItem := EmbedQueueItem{
 			Embed:    embed,
 			Priority: priority,
 		}
 
-		heap.Push(&embedQueue, embedQueueItem)
+		embedQueue = append(embedQueue, embedQueueItem)
 	}
+
+	sort.Slice(embedQueue[:], func(i, j int) bool {
+		return embedQueue[i].Priority > embedQueue[j].Priority
+	})
 
 	embedsOrderedByPriority := []MessageEmbed{}
 
-	for embedQueue.Len() > 0 {
-		embedQueueItem := heap.Pop(&embedQueue).(*MessageEmbedQueueItem)
+	for _, embedQueueItem := range embedQueue {
 		embedsOrderedByPriority = append(embedsOrderedByPriority, embedQueueItem.Embed)
 	}
 
