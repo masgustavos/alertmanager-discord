@@ -30,17 +30,20 @@ func ExtractBodyInfo(alertmanagerBody MessageBody, config config.Config) Message
 			alert.GeneratorURL = urlRegex.ReplaceAllString(alert.GeneratorURL, config.PrometheusURL+"/graph")
 		}
 
+		severityValue, ok := alert.Labels[config.Severity.Label]
+		if ok {
+			countBySeverity[severityValue]++
+		} else {
+			alert.Labels[config.Severity.Label] = "unknown"
+			countBySeverity["unknown"]++
+		}
+
 		if status == "firing" {
 			firingCount++
 			firingAlertsGroupedByName[alertName] = append(firingAlertsGroupedByName[alertName], alert)
 		} else if status == "resolved" {
 			resolvedCount++
 			resolvedAlertsGroupedByName[alertName] = append(resolvedAlertsGroupedByName[alertName], alert)
-		}
-
-		severityValue, ok := alert.Labels[config.Severity.Label]
-		if ok {
-			countBySeverity[severityValue]++
 		}
 
 	}
