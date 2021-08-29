@@ -1,0 +1,175 @@
+# Default values for alertmanager-discord.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+nameOverride: ""
+fullnameOverride: ""
+
+#########
+## APLICATION
+######
+
+image: masgustavos/alertmanager-discord:0.2.1
+imagePullPolicy: IfNotPresent
+imagePullSecrets: []
+
+env: {}
+
+# -- See https://github.com/masgustavos/alertmanager-discord/blob/master/config.example.yaml
+config:
+  # Set this URL to be able to click on the embed title and be redirected to
+  # Prometheus with the query that generated the alert
+  prometheusURL: "http://localhost:8000"
+  # Should be "status" or "severity". Defaults to "status".
+  messageType: severity
+  # How many firing alerts are necessary to add the "rolesToMention" in the message
+  firingCountToMention: 20
+  # Global config that defines which roles should be mentioned when the conditions
+  # to "firingCountToMention" or "severitiesToMention" are met. Can be overridden
+  # in channels config. To get the Role ID, just type the "@RoleName" in Discord
+  # prefixed with "\" and send a message in the channel. Like "\@RoleName"
+  rolesToMention:
+    - <@&744580719505965077>
+  # Embed esthetics when the messageType is set to "status"
+  status:
+    firing:
+      emoji: ":x:"
+      color: 10038562 #EmbedColorDarkRed
+    resolved:
+      emoji: ":white_check_mark:"
+      color: 3066993 # EmbedColorGreen
+  # Setting the label key that represents the concept of "severity" and the
+  # esthetics for each of its values.
+  severity:
+    label: severity
+    values:
+      unknown:
+        color: 9807270 # EmbedColorGrey
+        emoji: ":grey_question:"
+      information:
+        color: 3447003 # EmbedColorBlue
+        emoji: ":information_source:"
+      warning:
+        color: 15844367 # EmbedColorGold
+        emoji: ":warning:"
+        priority: 1
+      critical:
+        color: 11027200 # EmbedColorDarkOrange
+        emoji: ":x:"
+        priority: 2
+      disaster:
+        color: 10038562 # EmbedColorDarkRed
+        emoji: ":fire:"
+        priority: 3
+  # Which severities should enable mentioning in a message. Can be overriden
+  # in channels config
+  severitiesToMention:
+    - disaster
+    - critical
+  # Which severities should not be sent as message if no other is present.
+  # Useful to avoid sending only information alerts out of an incident context,
+  # for example.
+  severitiesToIgnoreWhenAlone:
+    - information
+  # The Discord channels and their basic info, with any necessary overrides from
+  # the global configs, such as "rolesToMention", "severitiesToMention" and
+  # "severitiesToIgnoreWhenAlone"
+  channels:
+    default:
+      name: default
+      webhookURL: https://discord.com/api/webhooks/839279584570346222/MoLzkAknHqyC9qUIHink101n4x0bRm6TzzhQl0pxzEPXpu5vD37enjG6UUSuJ05X4T_v
+    team-go:
+      name: team-go
+      webhookURL: https://discordapp.com/api/webhooks/839219806930616350/6FXg2PgY3PZ9CEuGBwNI1HdcLxXLrvLksFaPhxuVirnXq9P_ZHyUD3z0K5KFtGvFqvu9
+    team-prometheus:
+      name: team-prometheus
+      webhookURL: https://discordapp.com/api/webhooks/839279993096386891/nSkOM9mAzsBrSZrdrbGNjydLqhpZsQwgteCq_TV48OKxeOYYCu7JWx8GC3Rv46jVVwIm
+      severitiesToMention:
+        - disaster
+        - critical
+
+# -- If you don't want to expose your webhooks, create the config as a secret with the key "config"
+configAsSecret:
+  {}
+  # name: alertmanager-discord-secret
+
+#########
+## SCHEDULING
+######
+
+resources:
+  {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+tolerations: []
+
+nodeAffinity: {}
+
+podAnnotations: {}
+
+#########
+## MONITORING
+######
+
+livenessProbe:
+  path: /
+  initialDelaySeconds: 15
+  periodSeconds: 30
+  timeoutSeconds: 10
+  successThreshold: 1
+  failureThreshold: 3
+
+readinessProbe:
+  path: /
+  initialDelaySeconds: 15
+  periodSeconds: 30
+  timeoutSeconds: 10
+  successThreshold: 1
+  failureThreshold: 6
+
+#########
+## CONNECTIVITY
+######
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+ingress:
+  enabled: false
+  annotations: {}
+  hosts: []
+
+  paths:
+    "/": {}
+    # '/other': {}
+
+  tls: []
+  # - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+#########
+## SCALING / ROLLOUT
+######
+
+replicaCount: 1
+
+hpa:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCpu: 70
+
+pdb:
+  maxUnavailable: 1
+  # minAvailable: 1
+
+rollingUpdate:
+  maxSurge: 1

@@ -80,7 +80,7 @@ Copy the example config to a file named `my-config.yaml` and use your own *webho
 
 ### Install in Kubernetes with Helm
 
-There's a Helm Chart available at [masgustavos/helm/alertmanager-discord](https://github.com/masgustavos/helm/tree/main/charts/alertmanager-discord)
+There's a Helm Chart available at [masgustavos/helm/alertmanager-discord](https://github.com/masgustavos/helm/tree/main/charts/alertmanager-discord). Take a look at the [example values](mock/helm/) for both the [alertmanager-discord](mock/helm/values-ad.yaml) and the [community Prometheus Helm Chart](https://github.com/prometheus-community/helm-charts) (which includes the config for Alertmanager).
 
 ```bash
 # Add the repository
@@ -88,6 +88,7 @@ helm repo add masgustavos https://masgustavos.github.io/helm
 # Install the chart
 helm install alertmanager-discord --values <path_to_your_values> masgustavos/alertmanager-discord
 ```
+
 
 ## Develop and Experiment
 
