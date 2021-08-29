@@ -74,18 +74,19 @@ func CheckIfHasOnlySeveritiesToIgnoreWhenAlone(
 	}
 
 	for severity := range countBySeverity {
-		severityIsInIgnoreArray := false
-
-		for _, severityToIgnore := range severitiesToIgnore {
-			if severityToIgnore == severity {
-				severityIsInIgnoreArray = true
-			}
-		}
-
-		if !severityIsInIgnoreArray {
+		if !contains(severitiesToIgnore, severity) {
 			return false
 		}
 	}
 
 	return true
+}
+
+func contains(s []string, str string) bool {
+	for _, v := range s {
+		if v == str {
+			return true
+		}
+	}
+	return false
 }
