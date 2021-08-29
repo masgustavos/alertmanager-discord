@@ -29,5 +29,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: masgustavos/alertmanager-discord:${{ steps.meta.outputs.version }},masgustavos/alertmanager-discord:latest
           labels: ${{ steps.meta.outputs.labels }}
