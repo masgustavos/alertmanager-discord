@@ -78,6 +78,8 @@ Take a look at the [example config](config.example.yaml)! Each property is comme
 
 Copy the example config to a file named `my-config.yaml` and use your own *webhookURLs*. This is the filename expected by docker-compose. This file is gitignored.
 
+> You cannot have the word `discord` in the `username` config property. Hence, the default username is `alertmanager`, but this is an assumption and you can change it at will. See [config.go](config/config.go) to check all the possible customizations.
+
 ### Install in Kubernetes with Helm
 
 There's a Helm Chart available at [masgustavos/helm/alertmanager-discord](https://github.com/masgustavos/helm/tree/main/charts/alertmanager-discord). Take a look at the [example values](mock/helm/) for both the [alertmanager-discord](mock/helm/values-ad.yaml) and the [community Prometheus Helm Chart](https://github.com/prometheus-community/helm-charts) (which includes the config for Alertmanager).
