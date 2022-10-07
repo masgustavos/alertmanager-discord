@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"log"
 	"net/http"
 	"sort"
 	"strings"
@@ -58,10 +60,15 @@ func SendAlerts(
 	defer r.Body.Close()
 
 	if r.StatusCode != 204 {
+		contents, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			log.Println("discord.SendAlerts: Error reading response body", err)
+		}
+
 		return fmt.Errorf(
 			`discord.SendAlerts: Problem with Post, status code is not 204.
-			StatusCode: %d, Message: %s`,
-			r.StatusCode, r.Status)
+			StatusCode: %d, Message: %s, Request Body: %s, Response Body: %s`,
+			r.StatusCode, r.Status, string(jsonDiscordMessage), string(contents))
 	}
 
 	return nil
